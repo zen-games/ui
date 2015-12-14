@@ -1,6 +1,13 @@
 import React, { Component } from 'react'
 import { render } from 'react-dom'
+import { Router, Route } from 'react-router'
 import io from 'socket.io-client'
+
+// Views
+
+// import {
+//   CreateUserForm
+// } from './views'
 
 let socket = io(`http://localhost:8000`)
 
@@ -8,32 +15,73 @@ class App extends Component {
   constructor () {
     super()
     this.state = {
+      username: null,
       messages: []
     }
-
-    socket.on(`yo`,
-      () => this.setState({
-        messages: [ ...this.state.messages, `yo` ]
-      })
-    )
   }
 
-  sendYo = () => {
-    socket.emit(`yoo`)
+  createUser = (event, username) => {
+    event.preventDefault()
+    console.log(username)
+    socket.emit(`createUser`, username)
+    this.setState({ username })
   }
 
   render () {
-    let { messages } = this.state
+    let { username, messages } = this.state
+    let { children } = this.props
+    let input;
 
     return (
-      <div>
-        <button onClick={ this.sendYo }>Yo</button>
-      { messages.map(m => (
-        <div>{ m }</div>
-      ))}
+      <div
+        style={{
+          height: `100%`,
+          display: `flex`,
+          alignItems: `center`,
+          justifyContent: `center`,
+          color: `white`,
+          fontWeight: `100`,
+          fontSize: `2em`
+        }}
+      >
+        { username ||
+        <div>
+          <form
+            onSubmit={ event => this.createUser(event, input.value) }
+          >
+            <input
+              ref={ node => input = node }
+              placeholder="enter your username.."
+              style={{
+                backgroundColor: `transparent`,
+                border: `none`,
+                borderBottom: `1px solid white`,
+                outline: `none`,
+                fontSize: `1em`,
+                color: `white`,
+                padding: `0.5rem`,
+                fontWeight: `100`,
+              }}
+            />
+          </form>
+        </div>
+        }
+
+        { username &&
+        <div>
+          Hello { username }
+        </div>
+        }
+
+        { children }
       </div>
     )
   }
 }
 
-render(<App />, document.getElementById(`app`))
+let routes =
+  <Router>
+    <Route path="/" component={ App } />
+  </Router>
+
+render(routes, document.getElementById(`app`))

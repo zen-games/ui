@@ -3,12 +3,6 @@ import { render } from 'react-dom'
 import { Router, Route } from 'react-router'
 import io from 'socket.io-client'
 
-// Views
-
-// import {
-//   CreateUserForm
-// } from './views'
-
 let socket = io(`http://localhost:8000`)
 
 class App extends Component {
@@ -33,19 +27,19 @@ class App extends Component {
     let input;
 
     return (
-      <div
-        style={{
-          height: `100%`,
-          display: `flex`,
-          alignItems: `center`,
-          justifyContent: `center`,
-          color: `white`,
-          fontWeight: `100`,
-          fontSize: `2em`
-        }}
-      >
-        { username ||
-        <div>
+      <div>
+        { !!username ||
+        <div
+          style={{
+            height: `100%`,
+            display: `flex`,
+            alignItems: `center`,
+            justifyContent: `center`,
+            color: `white`,
+            fontWeight: `100`,
+            fontSize: `2em`
+          }}
+        >
           <form
             onSubmit={ event => this.createUser(event, input.value) }
           >
@@ -69,7 +63,15 @@ class App extends Component {
 
         { username &&
         <div>
-          Hello { username }
+          <div
+            style={{
+              fontSize: `1.5rem`,
+              padding: `2rem`,
+              color: `white`
+            }}
+          >
+            Hello { username }
+          </div>
         </div>
         }
 

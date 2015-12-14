@@ -1,30 +1,39 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { render } from 'react-dom'
+import io from 'socket.io-client'
 
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
+let socket = io(`http://localhost:8000`)
 
-let App = () =>
-  <div>
-    <h1>Hello world!</h1>
-    <Tabs>
-      <TabList>
-        <Tab>Foo</Tab>
-        <Tab>Bar</Tab>
-        <Tab>Baz</Tab>
-      </TabList>
+class App extends Component {
+  constructor () {
+    super()
+    this.state = {
+      messages: []
+    }
 
-      <TabPanel>
-        <h2>Hello from Foo</h2>
-      </TabPanel>
+    socket.on(`yo`,
+      () => this.setState({
+        messages: [ ...this.state.messages, `yo` ]
+      })
+    )
+  }
 
-      <TabPanel>
-        <h2>Hello from Bar</h2>
-      </TabPanel>
-      
-      <TabPanel>
-        <h2>Hello from Baz</h2>
-      </TabPanel>
-    </Tabs>
-  </div>
+  sendYo = () => {
+    socket.emit(`yoo`)
+  }
 
-render(<App />, document.getElementById('app'))
+  render () {
+    let { messages } = this.state
+
+    return (
+      <div>
+        <button onClick={ this.sendYo }>Yo</button>
+      { messages.map(m => (
+        <div>{ m }</div>
+      ))}
+      </div>
+    )
+  }
+}
+
+render(<App />, document.getElementById(`app`))

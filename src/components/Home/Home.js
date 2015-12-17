@@ -2,6 +2,7 @@ import React from 'react'
 
 export default ({
   createRoom,
+  joinRoom,
   logout,
   rooms,
   username
@@ -27,7 +28,7 @@ export default ({
 
     <div>
       <button
-        onClick = { () => logout(username) }
+        onClick = { logout }
       >
         Logout
       </button>
@@ -35,7 +36,11 @@ export default ({
 
     <div>
       { rooms.map(room =>
-      <div>{ room.id }</div>
+      <div
+        onClick = { () => joinRoom({ room, username }) }
+      >
+        { room.id }
+      </div>
       )}
     </div>
   </div>

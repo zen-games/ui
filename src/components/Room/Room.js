@@ -17,7 +17,7 @@ export default ({
     </div>
 
     <button
-      onClick = { () => leaveRoom(username) }
+      onClick = { () => leaveRoom({ username }) }
     >
       Leave
     </button>

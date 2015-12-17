@@ -20,7 +20,6 @@ This will create a minified version of `bundle.js`. Then you can simply open `in
 
 # Socket API
 
-### `createUser(username: string)`
-### `logout(username: string)`
 ### `createRoom(room: object)`
 ### `leaveRoom(username: string)`
+### `joinRoom(room: object)`

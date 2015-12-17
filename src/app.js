@@ -15,11 +15,12 @@ class App extends Component {
       username: null,
       rooms: []
     }
+
+    socket.on('createUser', )
   }
 
   createUser = (event, { username }) => {
     event.preventDefault()
-    socket.emit(`createUser`, username)
     this.setState({ username })
   }
 
@@ -30,8 +31,6 @@ class App extends Component {
       messages: []
     }
 
-    socket.emit(`createRoom`, room)
-
     this.setState({
       rooms: [
         ...this.state.rooms,
@@ -40,21 +39,27 @@ class App extends Component {
     })
   }
 
-  leaveRoom = (username) => {
+  leaveRoom = ({ username }) => {
     let rooms = this.state.rooms.filter(x => !x.users.some(x => x === username))
     socket.emit(`leaveRoom`, username)
-
-    console.log(rooms)
-
     this.setState({ rooms })
+  }
+
+  joinRoom = ({ username, room }) => {
+    room.users = [
+      ...room.users,
+      username
+    ]
+
+    socket.emit(`joinRoom`, room)
+    this.setState({ rooms: [ ...rooms, room ] })
   }
 
   whichRoom = (username) => {
     return this.state.rooms.filter(x => x.users.some(x => x === username))[0]
   }
 
-  logout = (username) => {
-    socket.emit(`logout`, username)
+  logout = () => {
     this.setState({ username: null })
   }
 
@@ -74,6 +79,7 @@ class App extends Component {
         <Home
           { ...this.state }
           createRoom = { this.createRoom }
+          joinRoom = { this.joinRoom }
           logout = { this.logout }
         />
         }

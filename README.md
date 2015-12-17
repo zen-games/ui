@@ -17,3 +17,10 @@ webpack -p
 ```
 
 This will create a minified version of `bundle.js`. Then you can simply open `index.html` in your browser and enjoy the fruits of your labor.
+
+# Socket API
+
+### `createUser(username: string)`
+### `logout(username: string)`
+### `createRoom(room: object)`
+### `leaveRoom(username: string)`

@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import { render } from 'react-dom'
 import { Router, Route } from 'react-router'
 import io from 'socket.io-client'
+import LoginForm from './components/LoginForm'
+import Home from './components/Home'
+import Room from './components/Room'
 
 let socket = io(`http://localhost:8000`)
 
@@ -10,72 +13,78 @@ class App extends Component {
     super()
     this.state = {
       username: null,
-      messages: []
+      rooms: []
     }
   }
 
-  createUser = (event, username) => {
+  createUser = (event, { username }) => {
     event.preventDefault()
-    console.log(username)
     socket.emit(`createUser`, username)
     this.setState({ username })
   }
 
+  createRoom = ({ username }) => {
+    let room = {
+      id: +new Date(),
+      users: [ username ],
+      messages: []
+    }
+
+    socket.emit(`createRoom`, room)
+
+    this.setState({
+      rooms: [
+        ...this.state.rooms,
+        room
+      ]
+    })
+  }
+
+  leaveRoom = (username) => {
+    let rooms = this.state.rooms.filter(x => !x.users.some(x => x === username))
+    socket.emit(`leaveRoom`, username)
+
+    console.log(rooms)
+
+    this.setState({ rooms })
+  }
+
+  whichRoom = (username) => {
+    return this.state.rooms.filter(x => x.users.some(x => x === username))[0]
+  }
+
+  logout = (username) => {
+    socket.emit(`logout`, username)
+    this.setState({ username: null })
+  }
+
   render () {
-    let { username, messages } = this.state
+    let { username, rooms } = this.state
     let { children } = this.props
-    let input;
 
     return (
       <div>
         { !!username ||
-        <div
-          style={{
-            height: `100%`,
-            display: `flex`,
-            alignItems: `center`,
-            justifyContent: `center`,
-            color: `white`,
-            fontWeight: `100`,
-            fontSize: `2em`
-          }}
-        >
-          <form
-            onSubmit={ event => this.createUser(event, input.value) }
-          >
-            <input
-              ref={ node => input = node }
-              placeholder="enter your username.."
-              style={{
-                backgroundColor: `transparent`,
-                border: `none`,
-                borderBottom: `1px solid white`,
-                outline: `none`,
-                fontSize: `1em`,
-                color: `white`,
-                padding: `0.5rem`,
-                fontWeight: `100`,
-              }}
-            />
-          </form>
-        </div>
+        <LoginForm
+          createUser = { this.createUser }
+        />
         }
 
-        { username &&
-        <div>
-          <div
-            style={{
-              fontSize: `1.5rem`,
-              padding: `2rem`,
-              color: `white`
-            }}
-          >
-            Hello { username }
-          </div>
-        </div>
+        { !!username && !(this.whichRoom(username) || {}).id &&
+        <Home
+          { ...this.state }
+          createRoom = { this.createRoom }
+          logout = { this.logout }
+        />
         }
 
-        { children }
+        { (this.whichRoom(username) || {}).id &&
+        <Room
+          leaveRoom = { this.leaveRoom }
+          room = { this.whichRoom(username) }
+          username = { username }
+        />
+        }
       </div>
     )
   }
@@ -83,7 +92,10 @@ class App extends Component {
 
 let routes =
   <Router>
-    <Route path="/" component={ App } />
+    <Route
+      path = "/"
+      component = { App }
+    />
   </Router>
 
 render(routes, document.getElementById(`app`))

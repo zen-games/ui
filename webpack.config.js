@@ -9,11 +9,8 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel?stage=0'
+        loader: 'babel'
       }
     ]
-  },
-  resolve: {
-    extensions: [ '', '.js' ]
   }
 }

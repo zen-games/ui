@@ -8,7 +8,8 @@ export default ({
   <div>
     <div
       style = {{
-        fontSize: `1.5rem`,
+        fontSize: `2rem`,
+        fontWeight: 100,
         padding: `2rem`,
         color: `white`
       }}

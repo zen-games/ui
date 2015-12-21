@@ -67,6 +67,8 @@ export default class App extends Component {
     let { username, rooms } = this.state
     let { children } = this.props
 
+    console.log(`render`, username)
+
     return (
       <div>
         { !!username ||

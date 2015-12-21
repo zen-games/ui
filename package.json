@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha src/components/App.test.js --require babel-core/register",
+    "test": "find ./src -name '*.test.js' | xargs mocha --require babel-core/register",
     "start": "webpack-dev-server --inline"
   },
   "author": "",

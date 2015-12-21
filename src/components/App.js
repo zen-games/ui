@@ -1,8 +1,16 @@
+// Dependencies
+
 import React, { Component } from 'react'
 import io from 'socket.io-client'
-import LoginForm from './LoginForm'
+
+// Components
+
 import Home from './Home'
+import LoginForm from './LoginForm'
 import Room from './Room'
+import SideBar from './SideBar'
+
+// Connect to server
 
 let socket = io(`http://localhost:8000`)
 
@@ -77,21 +85,34 @@ export default class App extends Component {
         />
         }
 
-        { !!username && !(this.whichRoom({ username }) || {}).id &&
-        <Home
-          { ...this.state }
-          createRoom = { this.createRoom }
-          joinRoom = { this.joinRoom }
-          logout = { this.logout }
-        />
-        }
+        { !!username &&
+        <div
+          style = {{
+            display: `flex`,
+            height: `100%`
+          }}
+        >
+          <SideBar
+            { ...this.state }
+            createRoom = { this.createRoom }
+            joinRoom = { this.joinRoom }
+            logout = { this.logout }
+          />
 
-        { (this.whichRoom({ username }) || {}).id &&
-        <Room
-          leaveRoom = { this.leaveRoom }
-          room = { this.whichRoom({ username }) }
-          username = { username }
-        />
+          { !(this.whichRoom({ username }) || {}).id &&
+          <Home
+            { ...this.state }
+          />
+          }
+
+          { (this.whichRoom({ username }) || {}).id &&
+          <Room
+            leaveRoom = { this.leaveRoom }
+            room = { this.whichRoom({ username }) }
+            username = { username }
+          />
+          }
+        </div>
         }
       </div>
     )

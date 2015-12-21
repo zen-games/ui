@@ -5,21 +5,37 @@ export default ({
   room: { id },
   username
 }) =>
-  <div>
+  <div
+    style = {{
+      flex: 1
+    }}
+  >
     <div
       style = {{
-        fontSize: `2rem`,
-        fontWeight: 100,
-        padding: `2rem`,
-        color: `white`
+        display: `flex`,
       }}
     >
-      Room ID: { id }
-    </div>
+      <div
+        style = {{
+          fontWeight: 100,
+          padding: `2rem`,
+          color: `white`
+        }}
+      >
+        Room ID: { id }
+      </div>
 
-    <button
-      onClick = { () => leaveRoom({ username }) }
-    >
-      Leave
-    </button>
+      <div
+        style = {{
+          width: `14rem`,
+          marginLeft: `auto`
+        }}
+      >
+        <button
+          onClick = { () => leaveRoom({ username }) }
+        >
+          Leave
+        </button>
+      </div>
+    </div>
   </div>

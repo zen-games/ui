@@ -6,6 +6,7 @@ export default ({
   joinRoom,
   logout,
   rooms,
+  setRoom,
   username
 }) =>
   <div
@@ -41,7 +42,7 @@ export default ({
 
     <div>
       <button
-        onClick = { () => createRoom({ username }) }
+        onClick = { () => setRoom({ id: `home` }) }
       >
         Browse Rooms
       </button>
@@ -66,14 +67,21 @@ export default ({
           fontWeight: 100,
           fontSize: `0.8em`,
           cursor: `pointer`,
-          paddingLeft: `0.8rem`,
+          padding: `0 0.8rem`,
           display: `flex`,
           height: `3rem`,
           alignItems: `center`
         }}
-        onClick = { () => joinRoom({ room, username }) }
+        onClick = { () => setRoom({ id: room.id }) }
       >
-      { room.id }
+        <span>{ room.id }</span>
+        <span
+          style = {{
+            marginLeft: `auto`
+          }}
+        >
+          # users: { room.users.length }
+        </span>
       </div>
       )}
     </div>

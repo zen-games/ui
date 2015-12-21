@@ -32,10 +32,15 @@ export default class App extends Component {
     socket.on(`api:leaveRoom`, ({ rooms }) => {
       this.setState({ rooms })
     })
+
+    socket.on(`api:createUser`, ({ rooms }) => {
+      this.setState({ rooms })
+    })
   }
 
   createUser = (event, { username }) => {
     event.preventDefault()
+    socket.emit(`ui:createUser`, { username })
     this.setState({ username })
   }
 
@@ -71,19 +76,18 @@ export default class App extends Component {
     })
   }
 
-  setRoom = ({ id }) => this.setState({ view: id })
+  setRoom = ({ id }) => {
+    this.setState({ view: id })
+  }
+
 
   sendMessage = ({ message }) => {
     socket.emit(`sendMessage`, { message })
   }
 
-  login = () => {
-    socket.emit(`ui:login`)
-  }
-
   logout = ({ username }) => {
-    this.setState({ username: null })
-    this.leaveRoom({ username })
+    this.setState({ rooms: [], username: null })
+    this.leaveRoom({ id: this.state.view, username })
     socket.emit(`ui:logout`, { username })
   }
 
@@ -110,6 +114,7 @@ export default class App extends Component {
             createRoom = { this.createRoom }
             joinRoom = { this.joinRoom }
             logout = { this.logout.bind(null, { username }) }
+            setRoom = { this.setRoom }
           />
 
           { view === `home` &&

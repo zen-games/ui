@@ -43,13 +43,24 @@ export default ({
       <button
         onClick = { () => createRoom({ username }) }
       >
-        Create Room
+        Browse Rooms
       </button>
     </div>
 
+    { rooms.some(x => x.owner === username) ||
     <div>
-    { rooms.map(room =>
+      <button
+        onClick = { () => createRoom({ username }) }
+      >
+        Create Room
+      </button>
+    </div>
+    }
+
+    <div>
+      { rooms.map(room =>
       <div
+        key = { room.id }
         style = {{
           color: `rgb(194, 206, 231)`,
           fontWeight: 100,
@@ -64,7 +75,7 @@ export default ({
       >
       { room.id }
       </div>
-    )}
+      )}
     </div>
 
     <div

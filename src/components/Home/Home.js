@@ -8,6 +8,7 @@ export default ({
     <div>
       { rooms.map(room =>
       <div
+        key = { room.id }
         onClick = { () => joinRoom({ room, username }) }
       >
         { room.id }

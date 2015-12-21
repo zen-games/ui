@@ -19,8 +19,19 @@ export default class App extends Component {
     super()
     this.state = {
       username: null,
+      view: `home`,
       rooms: []
     }
+
+    socket.on(`api:createRoom`, ({ room }) => {
+      this.setState({
+        rooms: [ ...this.state.rooms, room ]
+      })
+    })
+
+    socket.on(`api:leaveRoom`, ({ rooms }) => {
+      this.setState({ rooms })
+    })
   }
 
   createUser = (event, { username }) => {
@@ -31,51 +42,53 @@ export default class App extends Component {
   createRoom = ({ username }) => {
     let room = {
       id: +new Date(),
+      owner: username,
       users: [ username ],
       messages: []
     }
+
+    socket.emit(`ui:createRoom`, { room })
 
     this.setState({
       rooms: [
         ...this.state.rooms,
         room
-      ]
+      ],
+      view: room.id
     })
   }
 
-  leaveRoom = ({ username }) => {
-    let rooms = this.state.rooms.filter(x => !x.users.some(x => x === username))
-    socket.emit(`leaveRoom`, { username })
-    this.setState({ rooms })
+  leaveRoom = ({ id, username }) => {
+    socket.emit(`ui:leaveRoom`, { id, username })
+    this.setState({ view: `home` })
   }
 
   joinRoom = ({ username, room }) => {
-    room.users = [
-      ...room.users,
-      username
-    ]
-
-    socket.emit(`joinRoom`, { room })
-    this.setState({ rooms: [ ...rooms, room ] })
+    socket.emit(`ui:joinRoom`, { room })
+    this.setState({
+      rooms: [ ...rooms, room ],
+      view: room.id
+    })
   }
 
-  whichRoom = ({ username }) => {
-    return this.state.rooms.filter(x => x.users.some(x => x === username))[0]
-  }
+  setRoom = ({ id }) => this.setState({ view: id })
 
   sendMessage = ({ message }) => {
     socket.emit(`sendMessage`, { message })
   }
 
-  logout = () => {
+  login = () => {
+    socket.emit(`ui:login`)
+  }
+
+  logout = ({ username }) => {
     this.setState({ username: null })
+    this.leaveRoom({ username })
+    socket.emit(`ui:logout`, { username })
   }
 
   render () {
-    let { username, rooms } = this.state
-    let { children } = this.props
-
-    console.log(`render`, username)
+    let { username, rooms, view } = this.state
 
     return (
       <div>
@@ -96,22 +109,23 @@ export default class App extends Component {
             { ...this.state }
             createRoom = { this.createRoom }
             joinRoom = { this.joinRoom }
-            logout = { this.logout }
+            logout = { this.logout.bind(null, { username }) }
           />
 
-          { !(this.whichRoom({ username }) || {}).id &&
+          { view === `home` &&
           <Home
             { ...this.state }
           />
           }
 
-          { (this.whichRoom({ username }) || {}).id &&
+          { rooms.filter(x => x.id === view).map(room =>
           <Room
-            leaveRoom = { this.leaveRoom }
-            room = { this.whichRoom({ username }) }
+            key = { room.id }
+            leaveRoom = { this.leaveRoom.bind(null, { id: room.id, username }) }
+            room = { room }
             username = { username }
           />
-          }
+          )}
         </div>
         }
       </div>

@@ -32,7 +32,7 @@ export default ({
         }}
       >
         <button
-          onClick = { () => leaveRoom({ username }) }
+          onClick = { leaveRoom }
         >
           Leave
         </button>

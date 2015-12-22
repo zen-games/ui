@@ -1,6 +1,7 @@
 import React from 'react'
 import Radium from 'radium'
 import style from '../../style/colors.js'
+import { Col, Row } from '../Flex'
 
 function SideBar ({
   createRoom,
@@ -12,21 +13,18 @@ function SideBar ({
   view
 }) {
   return (
-    <div
+    <Col
       style = {{
         background: style.grey,
-        width: `16rem`,
-        display: `flex`,
-        flexDirection: `column`
+        width: `16rem`
       }}
     >
-      <div
+      <Row
         style = {{
           fontSize: `1.3rem`,
           fontWeight: 100,
           padding: `1.5rem`,
           color: `white`,
-          display: `flex`,
           alignItems: `center`
         }}
       >
@@ -41,7 +39,7 @@ function SideBar ({
         </i>
 
         <span>{ username }</span>
-      </div>
+      </Row>
 
       { !!rooms.length && view !== `home` &&
       <div>
@@ -107,7 +105,7 @@ function SideBar ({
           Logout
         </button>
       </div>
-    </div>
+    </Col>
   )
 }
 

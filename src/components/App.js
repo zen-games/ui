@@ -9,6 +9,7 @@ import Home from './Home'
 import LoginForm from './LoginForm'
 import Room from './Room'
 import SideBar from './SideBar'
+import { Row } from './Flex'
 
 // Connect to server
 
@@ -67,6 +68,11 @@ export default class App extends Component {
     socket.emit(`ui:logout`, { username })
   }
 
+  setGame = ({ game, id }) => {
+    console.log(game, id)
+    socket.emit(`ui:setGame`, { game, id })
+  }
+
   render () {
     let { username, rooms, view } = this.state
 
@@ -79,9 +85,8 @@ export default class App extends Component {
         }
 
         { !!username &&
-        <div
+        <Row
           style = {{
-            display: `flex`,
             height: `100%`
           }}
         >
@@ -107,10 +112,11 @@ export default class App extends Component {
             }
             room = { room }
             sendMessage = { this.sendMessage }
+            setGame = { this.setGame }
             username = { username }
           />
           )}
-        </div>
+        </Row>
         }
       </div>
     )

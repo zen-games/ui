@@ -8,7 +8,8 @@ function SideBar ({
   logout,
   rooms,
   setRoom,
-  username
+  username,
+  view
 }) {
   return (
     <div
@@ -42,7 +43,7 @@ function SideBar ({
         <span>{ username }</span>
       </div>
 
-      { !!rooms.length &&
+      { !!rooms.length && view !== `home` &&
       <div>
         <button
           onClick = { () => setRoom({ id: `home` }) }

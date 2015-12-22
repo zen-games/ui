@@ -23,18 +23,13 @@ export default class App extends Component {
       rooms: []
     }
 
-    socket.on(`api:createRoom`, ({ room }) => {
-      this.setState({
-        rooms: [
-          ...this.state.rooms,
-          room
-        ]
-      })
-    })
-
     socket.on(`api:updateRooms`, ({ rooms }) => {
       console.log('Rooms updated!', rooms)
       this.setState({ rooms })
+    })
+
+    socket.on(`api:createRoom`, ({ id }) => {
+      this.setState({ view: id })
     })
   }
 
@@ -45,22 +40,8 @@ export default class App extends Component {
   }
 
   createRoom = ({ username }) => {
-    let room = {
-      id: +new Date(),
-      owner: username,
-      users: [ username ],
-      messages: []
-    }
-
-    socket.emit(`ui:createRoom`, { room })
-
-    this.setState({
-      rooms: [
-        ...this.state.rooms,
-        room
-      ],
-      view: room.id
-    })
+    socket.emit(`ui:createRoom`, { username })
+    this.setS
   }
 
   leaveRoom = ({ id, username }) => {
@@ -130,7 +111,9 @@ export default class App extends Component {
           { rooms.filter(x => x.id === view).map(room =>
           <Room
             key = { room.id }
-            leaveRoom = { this.leaveRoom.bind(null, { id: room.id, username }) }
+            leaveRoom = {
+              this.leaveRoom.bind(null, { id: room.id, username })
+            }
             room = { room }
             sendMessage = { this.sendMessage }
             username = { username }

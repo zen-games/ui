@@ -17,9 +17,8 @@ let socket = io(`http://localhost:8000`)
 export default class App extends Component {
   constructor () {
     super()
+
     this.state = {
-      username: null,
-      view: `home`,
       rooms: []
     }
 
@@ -36,12 +35,11 @@ export default class App extends Component {
   createUser = (event, { username }) => {
     event.preventDefault()
     socket.emit(`ui:createUser`, { username })
-    this.setState({ username })
+    this.setState({ username, view: `home` })
   }
 
   createRoom = ({ username }) => {
     socket.emit(`ui:createRoom`, { username })
-    this.setS
   }
 
   leaveRoom = ({ id, username }) => {
@@ -60,14 +58,7 @@ export default class App extends Component {
 
   sendMessage = (event, { id, message, username }) => {
     event.preventDefault()
-    let room = this.state.rooms.filter(x => x.id === id)[0]
-
-    room.messages = [
-      ...room.messages,
-      { username, message, time: +new Date() }
-    ]
-
-    socket.emit(`ui:sendMessage`, { room })
+    socket.emit(`ui:sendMessage`, { id, message, username })
   }
 
   logout = ({ username }) => {

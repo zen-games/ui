@@ -25,11 +25,15 @@ export default class App extends Component {
 
     socket.on(`api:createRoom`, ({ room }) => {
       this.setState({
-        rooms: [ ...this.state.rooms, room ]
+        rooms: [
+          ...this.state.rooms,
+          room
+        ]
       })
     })
 
     socket.on(`api:updateRooms`, ({ rooms }) => {
+      console.log('Rooms updated!', rooms)
       this.setState({ rooms })
     })
   }
@@ -64,12 +68,9 @@ export default class App extends Component {
     this.setState({ view: `home` })
   }
 
-  joinRoom = ({ username, room }) => {
-    socket.emit(`ui:joinRoom`, { room })
-    this.setState({
-      rooms: [ ...rooms, room ],
-      view: room.id
-    })
+  joinRoom = ({ id, username }) => {
+    socket.emit(`ui:joinRoom`, { id, username })
+    this.setState({ view: id })
   }
 
   setRoom = ({ id }) => {
@@ -79,10 +80,12 @@ export default class App extends Component {
   sendMessage = (event, { id, message, username }) => {
     event.preventDefault()
     let room = this.state.rooms.filter(x => x.id === id)[0]
+
     room.messages = [
       ...room.messages,
       { username, message, time: +new Date() }
     ]
+
     socket.emit(`ui:sendMessage`, { room })
   }
 
@@ -113,7 +116,6 @@ export default class App extends Component {
           <SideBar
             { ...this.state }
             createRoom = { this.createRoom }
-            joinRoom = { this.joinRoom }
             logout = { this.logout.bind(null, { username }) }
             setRoom = { this.setRoom }
           />
@@ -121,6 +123,7 @@ export default class App extends Component {
           { view === `home` &&
           <Home
             { ...this.state }
+            joinRoom = { this.joinRoom }
           />
           }
 

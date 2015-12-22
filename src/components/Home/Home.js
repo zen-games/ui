@@ -1,6 +1,7 @@
 import React from 'react'
 
 export default ({
+  joinRoom,
   rooms,
   username
 }) =>
@@ -17,7 +18,7 @@ export default ({
       { rooms.filter(x => !x.users.some(x => x === username)).map(room =>
       <div
         key = { room.id }
-        onClick = { () => joinRoom({ room, username }) }
+        onClick = { () => joinRoom({ id: room.id, username }) }
         style = {{
           margin: `2rem`,
           width: `10rem`,

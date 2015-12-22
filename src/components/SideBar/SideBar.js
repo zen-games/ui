@@ -59,7 +59,7 @@ export default ({
     }
 
     <div>
-      { rooms.map(room =>
+      { rooms.filter(x => x.users.some(x => x === username)).map(room =>
       <div
         key = { room.id }
         style = {{

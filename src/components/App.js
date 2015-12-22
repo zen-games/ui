@@ -29,15 +29,7 @@ export default class App extends Component {
       })
     })
 
-    socket.on(`api:leaveRoom`, ({ rooms }) => {
-      this.setState({ rooms })
-    })
-
-    socket.on(`api:createUser`, ({ rooms }) => {
-      this.setState({ rooms })
-    })
-
-    socket.on(`api:sendMessage`, ({ rooms }) => {
+    socket.on(`api:updateRooms`, ({ rooms }) => {
       this.setState({ rooms })
     })
   }

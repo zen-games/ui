@@ -7,7 +7,7 @@ npm install
 npm start
 ```
 
-Then go to `localhost:8080`.
+Then go to `localhost:3000`.
 
 The [zen-games/api](https://github.com/zen-games/api) needs to be running.
 

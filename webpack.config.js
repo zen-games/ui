@@ -1,15 +1,27 @@
+var path = require('path')
+var webpack = require('webpack')
+
 module.exports = {
-  context: __dirname + '/src',
-  entry: './index.js',
+  devtool: 'eval',
+  entry: [
+    'webpack-dev-server/client?http://localhost:3000',
+    'webpack/hot/only-dev-server',
+    './src/index'
+  ],
   output: {
-    filename: 'bundle.js'
+    path: path.join(__dirname, 'dist'),
+    filename: 'bundle.js',
+    publicPath: '/static/'
   },
+  plugins: [
+    new webpack.HotModuleReplacementPlugin()
+  ],
   module: {
     loaders: [
       {
         test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'babel'
+        loaders: [ 'react-hot', 'babel' ],
+        include: path.join(__dirname, 'src')
       }
     ]
   }

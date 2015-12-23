@@ -27,15 +27,19 @@ export default class App extends Component {
 
     socket.on(`api:updateRooms`, ({ rooms }) => {
       console.log('Rooms updated!', rooms)
-      this.setState({ rooms, view: `home` })
+      this.setState({ rooms })
     })
 
     socket.on(`api:createRoom`, ({ id }) => {
       this.setState({ view: id })
     })
 
-    socket.on(`api:userExists`, ({ username }) => {
-      this.setState({ error: `user exists` })
+    socket.on(`api:userExists`, () => {
+      this.setState({ error: `User Exists` })
+    })
+
+    socket.on(`api:login`, () => {
+      this.setState({ view: `home` })
     })
   }
 
@@ -94,7 +98,7 @@ export default class App extends Component {
           />
         }
 
-        { !!username &&
+        { view === `home` &&
         <Row
           style = {{
             height: `100%`

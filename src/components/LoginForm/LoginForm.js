@@ -1,10 +1,11 @@
 import React from 'react'
-import { Center } from '../Flex'
+import { Center, Col } from '../Flex'
 
 let input
 
 export default function LoginForm ({
-  createUser
+  createUser,
+  error
 }) {
   return (
     <Center
@@ -15,24 +16,29 @@ export default function LoginForm ({
         fontSize: `2em`
       }}
     >
-      <form
-        onSubmit = { event => createUser(event, { username: input.value }) }
-      >
-        <input
-          ref = { node => input = node }
-          placeholder = "enter your username.."
-          style = {{
-            backgroundColor: `transparent`,
-            border: `none`,
-            borderBottom: `1px solid white`,
-            outline: `none`,
-            fontSize: `1em`,
-            color: `white`,
-            padding: `0.5rem`,
-            fontWeight: `100`,
-          }}
-        />
-      </form>
+      <Col>
+        <form
+          onSubmit = { event => createUser(event, { username: input.value }) }
+        >
+          <input
+            ref = { node => input = node }
+            placeholder = "enter your username.."
+            style = {{
+              backgroundColor: `transparent`,
+              border: `none`,
+              borderBottom: `1px solid white`,
+              outline: `none`,
+              fontSize: `1em`,
+              color: `white`,
+              padding: `0.5rem`,
+              fontWeight: `100`,
+            }}
+          />
+        </form>
+        <Center>
+          { error }
+        </Center>
+      </Col>
     </Center>
   )
 }

@@ -98,7 +98,7 @@ export default class App extends Component {
           />
         }
 
-        { view === `home` &&
+        { view !== `login` &&
         <Row
           style = {{
             height: `100%`

@@ -73,8 +73,12 @@ export default class App extends Component {
   }
 
   logout = ({ username }) => {
-    this.setState({ rooms: [], username: null })
-    this.leaveRoom({ id: this.state.view, username })
+    this.setState({
+      rooms: [],
+      username: null,
+      view: `login`
+    })
+
     socket.emit(`ui:logout`, { username })
   }
 

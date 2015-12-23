@@ -13,7 +13,7 @@ export default class TicTacToe extends Component {
     let gameWrapper = document.querySelector(`#game-wrapper`)
     let canvas = document.querySelector(`#tic-tac-toe`)
     let context = canvas.getContext(`2d`)
-    let center, corner
+    let center, corner, mouseX, mouseY
 
     let SIZE = 275
     let SQUARE = SIZE / 3
@@ -31,46 +31,49 @@ export default class TicTacToe extends Component {
         x: (canvas.width / 2) - (SIZE / 2),
         y: (canvas.height / 2) - (SIZE / 2),
       }
-
-      draw()
     }
 
     resize()
     window.onresize = resize
 
+    let mouse = { x: 0, y: 0 }
+
+    window.onmousemove = event =>
+      mouse = { x: event.clientX, y: event.clientY }
+
+    canvas.onclick = (e) => {
+      let x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft
+      let y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop
+      x -= canvas.offsetLeft + corner.x
+      y -= canvas.offsetTop + corner.y
+
+      console.log(x, y)
+    }
+
+    let pairs = [
+      {
+        from: [ corner.x + (SQUARE), corner.y ],
+        to: [ corner.x + (SQUARE), corner.y + SIZE ]
+      },
+      {
+        from: [ corner.x + (SQUARE * 2), corner.y ],
+        to: [ corner.x + (SQUARE * 2), corner.y + SIZE ]
+      },
+      {
+        from: [ corner.x, corner.y + (SQUARE) ],
+        to: [ corner.x + SIZE, corner.y + (SQUARE) ]
+      },
+      {
+        from: [ corner.x, corner.y + (SQUARE * 2) ],
+        to: [ corner.x + SIZE, corner.y + (SQUARE * 2) ]
+      }
+    ]
+
     function draw () {
+      canvas.width = canvas.width
 
-      // outer
-
-      context.beginPath()
-      context.rect(
-        ...center,
-        SIZE, SIZE
-      )
       context.lineWidth = 5
       context.strokeStyle = `rgb(113, 137, 164)`
-      context.stroke()
-
-      // lines
-
-      let pairs = [
-        {
-          from: [ corner.x + (SQUARE), corner.y ],
-          to: [ corner.x + (SQUARE), corner.y + SIZE ]
-        },
-        {
-          from: [ corner.x + (SQUARE * 2), corner.y ],
-          to: [ corner.x + (SQUARE * 2), corner.y + SIZE ]
-        },
-        {
-          from: [ corner.x, corner.y + (SQUARE) ],
-          to: [ corner.x + SIZE, corner.y + (SQUARE) ]
-        },
-        {
-          from: [ corner.x, corner.y + (SQUARE * 2) ],
-          to: [ corner.x + SIZE, corner.y + (SQUARE * 2) ]
-        }
-      ]
 
       pairs.forEach(p => {
         context.beginPath()
@@ -78,7 +81,42 @@ export default class TicTacToe extends Component {
         context.lineTo(...p.to)
         context.stroke()
       })
+
+      let x = mouse.x + document.body.scrollLeft + document.documentElement.scrollLeft
+      let y = mouse.y + document.body.scrollTop + document.documentElement.scrollTop
+
+      x -= canvas.offsetLeft + corner.x
+      y -= canvas.offsetTop + corner.y
+
+      x = Math.min(Math.max(0, x), SIZE - 1)
+      y = Math.min(Math.max(0, y), SIZE - 1)
+
+      x = Math.floor(x / SIZE * 3)
+      y = Math.floor(y / SIZE * 3)
+
+      // context.beginPath()
+
+      context.font = `100px sans-serif`
+      context.textBaseline = `hanging`
+      context.fillStyle = `rgb(113, 137, 164)`
+
+      context.fillText(
+        `X`,
+        (corner.x + (x * SQUARE)) + 12,
+        (corner.y + (y * SQUARE)) + 9
+      )
+      // context.rect(
+      //   corner.x + (x * SQUARE), corner.y + (y * SQUARE),
+      //   SQUARE, SQUARE
+      // )
+      // context.fillStyle = `rgb(47, 56, 65)`
+      // context.fill()
+
+      window.requestAnimationFrame(draw)
     }
+
+    // do it!
+    draw()
   }
 
   render() {

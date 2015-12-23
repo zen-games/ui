@@ -20,23 +20,29 @@ export default class App extends Component {
     super()
 
     this.state = {
-      rooms: []
+      view: `login`,
+      rooms: [],
+      error: null
     }
 
     socket.on(`api:updateRooms`, ({ rooms }) => {
       console.log('Rooms updated!', rooms)
-      this.setState({ rooms })
+      this.setState({ rooms, view: `home` })
     })
 
     socket.on(`api:createRoom`, ({ id }) => {
       this.setState({ view: id })
     })
+
+    socket.on(`api:userExists`, ({ username }) => {
+      this.setState({ error: `user exists` })
+    })
   }
 
   createUser = (event, { username }) => {
     event.preventDefault()
+    this.setState({ username })
     socket.emit(`ui:createUser`, { username })
-    this.setState({ username, view: `home` })
   }
 
   createRoom = ({ username }) => {
@@ -77,14 +83,15 @@ export default class App extends Component {
   }
 
   render () {
-    let { username, rooms, view } = this.state
+    let { username, rooms, view, error } = this.state
 
     return (
       <div>
-        { !!username ||
-        <LoginForm
-          createUser = { this.createUser }
-        />
+        { view === `login` &&
+          <LoginForm
+            createUser = { this.createUser }
+            error = { error }
+          />
         }
 
         { !!username &&

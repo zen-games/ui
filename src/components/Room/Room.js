@@ -92,7 +92,7 @@ export default function Room ({
           sendMessage = { sendMessage }
           username = { username }
           style = {{
-            flexGrow: 1
+            width: `28rem`
           }}
         />
 

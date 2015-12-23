@@ -8,11 +8,18 @@ export default function Room ({
   room,
   sendMessage,
   setGame,
+  startGame,
   username
 }) {
-  function renderGame (game) {
-    let Game = games[game]
-    return <Game />
+  function renderGame (name) {
+    let Game = games[name]
+    return (
+      <Game
+        room = { room }
+        startGame = { startGame }
+        username = { username }
+      />
+    )
   }
 
   return (
@@ -94,7 +101,22 @@ export default function Room ({
             flexGrow: 2
           }}
         >
-          { renderGame(room.game) }
+          { room.game.started ||
+          <div
+            style = {{
+              color: `white`
+            }}
+          >
+            Ready for some Tic Tac Toe??
+            <button
+              onClick = { () => startGame({ id: room.id, username }) }
+            >
+              start
+            </button>
+          </div>
+          }
+
+          { room.game.started && renderGame(room.game.name) }
         </Center>
       </Row>
       }

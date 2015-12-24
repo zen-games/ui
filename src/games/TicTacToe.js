@@ -10,6 +10,12 @@ export default class TicTacToe extends Component {
   }
 
   componentDidMount() {
+    let {
+      makeMove,
+      room: { id },
+      username
+    } = this.props
+
     let gameWrapper = document.querySelector(`#game-wrapper`)
     let canvas = document.querySelector(`#tic-tac-toe`)
     let context = canvas.getContext(`2d`)
@@ -57,20 +63,31 @@ export default class TicTacToe extends Component {
 
     let mouse = { x: 0, y: 0 }
 
-    window.onmousemove = event => {
+    window.onmousemove = (event) => {
       mouse = { x: event.clientX, y: event.clientY }
     }
 
-    // canvas.onclick = (e) => {
-    //   let x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft
-    //   let y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop
-    //   x -= canvas.offsetLeft + corner.x
-    //   y -= canvas.offsetTop + corner.y
-    //
-    //   console.log(x, y)
-    // }
+    canvas.onclick = () => {
+      let x = mouse.x
+      let y = mouse.y
+
+      x -= canvas.offsetLeft + corner.x
+      y -= canvas.offsetTop + corner.y
+
+      x = Math.min(Math.max(0, x), SIZE - 1)
+      y = Math.min(Math.max(0, y), SIZE - 1)
+
+      x = Math.floor(x / SIZE * 3)
+      y = Math.floor(y / SIZE * 3)
+
+      makeMove({ id, x, y })
+    }
 
     let draw = () => {
+      let {
+        room: { game }
+      } = this.props
+
       canvas.width = canvas.width
 
       context.lineWidth = 5
@@ -102,10 +119,20 @@ export default class TicTacToe extends Component {
       context.fillStyle = `rgb(113, 137, 164)`
 
       context.fillText(
-        `X`,
+        game.turn === username ? `X` : `O`,
         (corner.x + (x * SQUARE)) + 12,
         (corner.y + (y * SQUARE)) + 9
       )
+
+      game.state[game.state.length -1].forEach((row, x) => {
+        row.forEach((cell, y) => {
+          context.fillText(
+            cell === 1 ? `X` : cell === -1 ? `O` : ``,
+            (corner.x + (x * SQUARE)) + 12,
+            (corner.y + (y * SQUARE)) + 9
+          )
+        })
+      })
 
       window.requestAnimationFrame(draw)
     }

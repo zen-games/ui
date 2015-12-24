@@ -39,11 +39,13 @@ export default function GameArea ({
           <div>
             <div>A challenger has appeared!</div>
 
+            { room.users.filter(x => !x.ready).some(x => x.username === username) &&
             <button
               onClick = { () => startGame({ id: room.id, username }) }
             >
               I'm Ready!
             </button>
+            }
           </div>
           }
         </div>

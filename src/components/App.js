@@ -82,6 +82,10 @@ export default class App extends Component {
     socket.emit(`ui:logout`, { username })
   }
 
+  makeMove = ({ id, x, y }) => {
+    socket.emit(`ui:makeMove`, { id, x, y })
+  }
+
   setGame = ({ game, id }) => {
     socket.emit(`ui:setGame`, { game, id })
   }
@@ -128,6 +132,7 @@ export default class App extends Component {
             leaveRoom = {
               this.leaveRoom.bind(null, { id: room.id, username })
             }
+            makeMove = { this.makeMove }
             room = { room }
             sendMessage = { this.sendMessage }
             setGame = { this.setGame }

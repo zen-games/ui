@@ -13,7 +13,7 @@ export default class TicTacToe extends Component {
     let gameWrapper = document.querySelector(`#game-wrapper`)
     let canvas = document.querySelector(`#tic-tac-toe`)
     let context = canvas.getContext(`2d`)
-    let center, corner, mouseX, mouseY, pairs
+    let center, corner, pairs
 
     let SIZE = 275
     let SQUARE = SIZE / 3

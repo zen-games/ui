@@ -13,7 +13,8 @@ export default function Room ({
   username
 }) {
   let renderGame = (name) => {
-    let Game = games[name].component
+    let Game = games.filter(x => x.name === name)[0].component
+
     return (
       <Game
         room = { room }
@@ -22,6 +23,8 @@ export default function Room ({
       />
     )
   }
+
+  console.log('test', room)
 
   return (
     <Col
@@ -36,10 +39,17 @@ export default function Room ({
 
       { !!room.game ||
       <Row>
-        { Object.keys(games).map(game =>
+        { games.map(game =>
         <Center
-          key = { game }
-          onClick = { () => setGame({ game, id: room.id }) }
+          key = { game.name }
+          onClick = {
+            () => {
+              setGame({
+                game,
+                id: room.id
+              })
+            }
+          }
           style = {{
             margin: `2rem`,
             width: `10rem`,
@@ -49,7 +59,7 @@ export default function Room ({
             cursor: `pointer`
           }}
         >
-          { game }
+          { game.name }
         </Center>
         )}
       </Row>
@@ -77,12 +87,21 @@ export default function Room ({
               color: `white`
             }}
           >
-            Ready for some Tic Tac Toe??
-            <button
-              onClick = { () => startGame({ id: room.id, username }) }
-            >
-              start
-            </button>
+            { room.users.length === room.game.players ||
+            <div>Waiting for an opponent.</div>
+            }
+
+            { room.users.length === room.game.players &&
+            <div>
+              <div>A challenger has appeared!</div>
+
+              <button
+                onClick = { () => startGame({ id: room.id, username }) }
+              >
+                I'm Ready!
+              </button>
+            </div>
+            }
           </div>
           }
 

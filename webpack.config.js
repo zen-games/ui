@@ -24,5 +24,14 @@ module.exports = {
         include: path.join(__dirname, 'src')
       }
     ]
+  },
+  resolve: {
+    root: path.resolve(__dirname),
+     alias: {
+       components: 'src/components',
+       games: 'src/games',
+       style: 'src/style'
+     },
+     extensions: ['', '.js']
   }
 }

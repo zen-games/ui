@@ -1,5 +1,8 @@
 import TicTacToe from './TicTacToe'
 
 export default {
-  TicTacToe
+  TicTacToe: {
+    component: TicTacToe,
+    players: 2
+  }
 }

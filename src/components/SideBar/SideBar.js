@@ -1,7 +1,7 @@
 import React from 'react'
 import Radium from 'radium'
-import style from '../../style/colors.js'
-import { Col, Row } from '../Flex'
+import { colors } from 'style'
+import { Col, Row } from 'components/Flex'
 
 function SideBar ({
   createRoom,
@@ -15,7 +15,7 @@ function SideBar ({
   return (
     <Col
       style = {{
-        background: style.grey,
+        background: colors.grey,
         width: `16rem`
       }}
     >

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Center, Col } from '../Flex'
+import { Center, Col } from 'components/Flex'
 
 let input
 

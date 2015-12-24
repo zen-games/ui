@@ -1,5 +1,5 @@
 import React from 'react'
-import { Center, Row } from '../Flex'
+import { Center, Row } from 'components/Flex'
 
 export default function Home ({
   joinRoom,

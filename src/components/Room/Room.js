@@ -1,7 +1,8 @@
 import React from 'react'
-import { Center, Col, Row } from '../Flex'
-import Chat from '../Chat'
-import games from '../../games'
+import { Center, Col, Row } from 'components/Flex'
+import Chat from 'components/Chat'
+import RoomHeader from 'components/Room/RoomHeader'
+import games from 'games'
 
 export default function Room ({
   leaveRoom,
@@ -11,8 +12,8 @@ export default function Room ({
   startGame,
   username
 }) {
-  function renderGame (name) {
-    let Game = games[name]
+  let renderGame = (name) => {
+    let Game = games[name].component
     return (
       <Game
         room = { room }
@@ -28,41 +29,10 @@ export default function Room ({
         flex: 1,
       }}
     >
-      <Row
-        style = {{
-          height: `5rem`
-        }}
-      >
-        <div
-          style = {{
-            fontWeight: 100,
-            padding: `2rem`,
-            color: `white`
-          }}
-        >
-          Room ID: { room.id }
-        </div>
-
-        <div
-          style = {{
-            width: `14rem`,
-            marginLeft: `auto`,
-            display: `flex`
-          }}
-        >
-          <div
-            style = {{
-              flexGrow: 1
-            }}
-          >
-            <button
-              onClick = { leaveRoom }
-            >
-              Leave
-            </button>
-          </div>
-        </div>
-      </Row>
+      <RoomHeader
+        leaveRoom = { leaveRoom }
+        room = { room }
+      />
 
       { !!room.game ||
       <Row>

@@ -5,11 +5,11 @@ import io from 'socket.io-client'
 
 // Components
 
-import Home from './Home'
-import LoginForm from './LoginForm'
-import Room from './Room'
-import SideBar from './SideBar'
-import { Row } from './Flex'
+import Home from 'components/Home'
+import LoginForm from 'components/LoginForm'
+import Room from 'components/Room'
+import SideBar from 'components/SideBar'
+import { Row } from 'components/Flex'
 
 // Connect to server
 

@@ -1,19 +1,16 @@
 import React, { Component } from 'react'
-import { Col } from '../Flex'
+import { Col } from 'components/Flex'
 
-let input, messageList
+let messageList = {}
+let input
 
 export default class Chat extends Component {
   componentDidMount = () => {
-    if (messageList) {
-      messageList.scrollTop = messageList.scrollHeight
-    }
+    messageList.scrollTop = messageList.scrollHeight
   }
 
   componentDidUpdate = () => {
-    if (messageList) {
-      messageList.scrollTop = messageList.scrollHeight
-    }
+    messageList.scrollTop = messageList.scrollHeight
   }
 
   render() {
@@ -32,9 +29,11 @@ export default class Chat extends Component {
           ...style
         }}
       >
-        <Col
+        <div
           ref = { node => messageList = node }
           style = {{
+            display: `flex`,
+            flexDirection: `column`,
             height: `calc(100% - 3rem)`,
             overflow: `auto`
           }}
@@ -85,7 +84,7 @@ export default class Chat extends Component {
             </div>
             )}
           </div>
-        </Col>
+        </div>
 
         <form
           style = {{

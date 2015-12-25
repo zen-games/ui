@@ -19,19 +19,14 @@ export default class TicTacToe extends Component {
     let gameWrapper = document.querySelector(`#game-wrapper`)
     let canvas = document.querySelector(`#tic-tac-toe`)
     let context = canvas.getContext(`2d`)
-    let center, corner, pairs
+    let corner, pairs
 
     let SIZE = 275
     let SQUARE = SIZE / 3
 
-    let resize = () => {
+    let setCoordinates = () => {
       canvas.width = gameWrapper.clientWidth
       canvas.height = gameWrapper.clientHeight
-
-      center = [
-        (canvas.width / 2) - (SIZE / 2),
-        (canvas.height / 2) - (SIZE / 2)
-      ]
 
       corner = {
         x: (canvas.width / 2) - (SIZE / 2),
@@ -58,8 +53,8 @@ export default class TicTacToe extends Component {
       ]
     }
 
-    resize()
-    window.onresize = resize
+    setCoordinates()
+    window.onresize = setCoordinates
 
     let mouse = { x: 0, y: 0 }
 
@@ -67,7 +62,7 @@ export default class TicTacToe extends Component {
       mouse = { x: event.clientX, y: event.clientY }
     }
 
-    canvas.onclick = () => {
+    let getCell = () => {
       let x = mouse.x
       let y = mouse.y
 
@@ -80,7 +75,14 @@ export default class TicTacToe extends Component {
       x = Math.floor(x / SIZE * 3)
       y = Math.floor(y / SIZE * 3)
 
-      makeMove({ id, x, y })
+      return { x, y }
+    }
+
+    canvas.onclick = () => {
+      if (this.props.room.game.turn === username) {
+        let { x, y } = getCell()
+        makeMove({ id, x, y })
+      }
     }
 
     let draw = () => {
@@ -88,7 +90,11 @@ export default class TicTacToe extends Component {
         room: { game }
       } = this.props
 
+      // reset frame
+
       canvas.width = canvas.width
+
+      // draw lines
 
       context.lineWidth = 5
       context.strokeStyle = `rgb(113, 137, 164)`
@@ -100,29 +106,25 @@ export default class TicTacToe extends Component {
         context.stroke()
       })
 
-      let x = mouse.x
-      let y = mouse.y
-
-      x -= canvas.offsetLeft + corner.x
-      y -= canvas.offsetTop + corner.y
-
-      x = Math.min(Math.max(0, x), SIZE - 1)
-      y = Math.min(Math.max(0, y), SIZE - 1)
-
-      x = Math.floor(x / SIZE * 3)
-      y = Math.floor(y / SIZE * 3)
-
-      // context.beginPath()
+      // X & O style
 
       context.font = `100px sans-serif`
       context.textBaseline = `hanging`
       context.fillStyle = `rgb(113, 137, 164)`
 
-      context.fillText(
-        game.turn === username ? `X` : `O`,
-        (corner.x + (x * SQUARE)) + 12,
-        (corner.y + (y * SQUARE)) + 9
-      )
+      // draw X or O on hover
+
+      if (game.turn === username) {
+        let { x, y } = getCell()
+
+        context.fillText(
+          game.state.length % 2 === 0 ? `X` : `O`,
+          (corner.x + (x * SQUARE)) + 12,
+          (corner.y + (y * SQUARE)) + 9
+        )
+      }
+
+      // draw last game state
 
       game.state[game.state.length -1].forEach((row, x) => {
         row.forEach((cell, y) => {
@@ -141,11 +143,6 @@ export default class TicTacToe extends Component {
   }
 
   render() {
-    let {
-      room,
-      username
-    } = this.props
-
     return (
       <div
         id = "game-wrapper"

@@ -8,6 +8,7 @@ import games from 'games'
 export default function Room ({
   leaveRoom,
   makeMove,
+  movePaddle,
   room,
   sendMessage,
   setGame,
@@ -20,6 +21,7 @@ export default function Room ({
     return (
       <Game
         makeMove = { makeMove }
+        movePaddle = { movePaddle }
         room = { room }
         username = { username }
       />

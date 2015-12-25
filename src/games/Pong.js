@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 export default class Pong extends Component {
   componentDidMount() {
     let {
-      makeMove,
+      movePaddle,
       room: { id },
       username
     } = this.props
@@ -24,6 +24,7 @@ export default class Pong extends Component {
 
     window.onmousemove = (event) => {
       mouse = { x: event.clientX, y: event.clientY }
+      movePaddle({ id, mouse, username })
     }
 
     canvas.onclick = () => {
@@ -31,16 +32,41 @@ export default class Pong extends Component {
     }
 
     let draw = () => {
+      let {
+        room: { users }
+      } = this.props
+
+      let player2 = users.filter(x => x.username !== username)[0]
+
       canvas.width = canvas.width
+
+      let PADDLE_WIDTH = 80
+      let PADDLE_HEIGHT = 10
 
       let x = mouse.x
       x -= canvas.offsetLeft
+      x = Math.min(Math.max(0, x), canvas.width - PADDLE_WIDTH)
 
-      x = Math.min(Math.max(0, x), canvas.width - 80)
+      if (player2.mouse) {
+        let x2 = player2.mouse.x
+        x2 -= canvas.offsetLeft
+        x2 = Math.min(Math.max(0, x2), canvas.width - PADDLE_WIDTH)
+
+        context.beginPath()
+        context.fillStyle = `rgb(185, 223, 240)`
+        context.rect(
+          x2, 25,
+          PADDLE_WIDTH, PADDLE_HEIGHT
+        )
+        context.fill()
+      }
 
       context.beginPath()
       context.fillStyle = `rgb(185, 223, 240)`
-      context.rect(x, canvas.height - 25, 80, 10)
+      context.rect(
+        x, canvas.height - 25,
+        PADDLE_WIDTH, PADDLE_HEIGHT
+      )
       context.fill()
 
       window.requestAnimationFrame(draw)

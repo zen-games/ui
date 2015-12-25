@@ -1,14 +1,6 @@
 import React, { Component } from 'react'
 
 export default class TicTacToe extends Component {
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      gameover: false
-    }
-  }
-
   componentDidMount() {
     let {
       makeMove,
@@ -79,7 +71,10 @@ export default class TicTacToe extends Component {
     }
 
     canvas.onclick = () => {
-      if (this.props.room.game.turn === username) {
+      if (
+        this.props.room.game.turn === username &&
+        !this.props.room.game.winner
+      ) {
         let { x, y } = getCell()
         makeMove({ id, x, y })
       }
@@ -113,7 +108,7 @@ export default class TicTacToe extends Component {
 
       // draw X or O on hover
 
-      if (game.turn === username) {
+      if (game.turn === username && !game.winner) {
         let { x, y } = getCell()
 
         let cell =

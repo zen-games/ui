@@ -32,12 +32,31 @@ export default function GameArea ({
           }}
         >
           { room.users.length === room.game.players ||
-          <div>Waiting for an opponent.</div>
+          <div>
+            <div
+              style = {{
+                textAlign: `center`
+              }}
+            >
+              Waiting for an opponent.
+            </div>
+            <button
+              onClick = { () => startGame({ ai: true, id: room.id, username }) }
+            >
+              Play against the computer
+            </button>
+          </div>
           }
 
           { room.users.length === room.game.players &&
           <div>
-            <div>A challenger has appeared!</div>
+            <div
+              style = {{
+                textAlign: `center`
+              }}
+            >
+              A challenger has appeared!
+            </div>
 
             { room.users.filter(x => !x.ready).some(x => x.username === username) &&
             <button

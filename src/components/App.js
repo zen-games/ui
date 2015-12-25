@@ -90,8 +90,8 @@ export default class App extends Component {
     socket.emit(`ui:setGame`, { game, id })
   }
 
-  startGame = ({ id, username }) => {
-    socket.emit(`ui:startGame`, { id, username })
+  startGame = ({ ai, id, username }) => {
+    socket.emit(`ui:startGame`, { ai, id, username })
   }
 
   movePaddle = ({ id, mouse, username }) => {

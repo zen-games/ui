@@ -110,26 +110,32 @@ export default class TicTacToe extends Component {
 
       context.font = `100px sans-serif`
       context.textBaseline = `hanging`
-      context.fillStyle = `rgb(113, 137, 164)`
 
       // draw X or O on hover
 
       if (game.turn === username) {
         let { x, y } = getCell()
 
-        context.fillText(
-          game.state.length % 2 === 0 ? `X` : `O`,
-          (corner.x + (x * SQUARE)) + 12,
-          (corner.y + (y * SQUARE)) + 9
-        )
+        let cell =
+          game.state[game.state.length - 1][x][y]
+
+        if (!cell) {
+          context.fillStyle = `rgb(137, 164, 113)`
+          context.fillText(
+            game.state.length % 2 === 0 ? `O` : `X`,
+            (corner.x + (x * SQUARE)) + 12,
+            (corner.y + (y * SQUARE)) + 9
+          )
+        }
       }
 
       // draw last game state
 
+      context.fillStyle = `rgb(113, 137, 164)`
       game.state[game.state.length -1].forEach((row, x) => {
         row.forEach((cell, y) => {
           context.fillText(
-            cell === 1 ? `X` : cell === -1 ? `O` : ``,
+            cell === 1 ? `O` : cell === -1 ? `X` : ``,
             (corner.x + (x * SQUARE)) + 12,
             (corner.y + (y * SQUARE)) + 9
           )

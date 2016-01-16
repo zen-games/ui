@@ -149,9 +149,28 @@ export default class TicTacToe extends Component {
         id = "game-wrapper"
         style = {{
           width: `100%`,
-          height: `calc(100% - 5rem)`
+          height: `calc(100% - 5rem)`,
+          // position: `relative`
         }}
       >
+        { this.props.room.game.winner &&
+        <div
+          style = {{
+            position: `absolute`,
+            width: `12rem`
+          }}
+        >
+          <h3
+            style = {{
+              color: `white`,
+              textAlign: `center`
+            }}
+          >
+            Game over!
+          </h3>
+          <button>Play again?</button>
+        </div>
+        }
         <canvas
           id = "tic-tac-toe"
         />

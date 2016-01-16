@@ -41,9 +41,30 @@ export default function GameArea ({
               Waiting for an opponent.
             </div>
             <button
-              onClick = { () => startGame({ ai: true, id: room.id, username }) }
+              onClick = {
+                () => {
+                  startGame({
+                    ai: `weak`,
+                    id: room.id,
+                    username
+                  })
+                }
+              }
             >
-              Play against the computer
+              Play Weak AI
+            </button>
+            <button
+              onClick = {
+                () => {
+                  startGame({
+                    ai: `strong`,
+                    id: room.id,
+                    username
+                  })
+                }
+              }
+            >
+              Play Strong AI
             </button>
           </div>
           }
